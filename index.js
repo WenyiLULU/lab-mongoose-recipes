@@ -26,7 +26,7 @@ mongoose
         console.log('An error happened:', error);
         return;
       }else{
-        // console.log('The user is saved and its value is: ', recipes);
+        // console.log('The recipes is saved and its value is: ', recipes);
         Recipe.find({}, 'title')
               .then (recipe => console.log(recipe))
               .catch(error => {console.log(error)});
@@ -34,15 +34,21 @@ mongoose
     
     Recipe.findOneAndUpdate({title:"Rigatoni alla Genovese"}, { $set: { duration: 100 } })
         .then(console.log("update done"))
-        .catch(console.log("update error"));
+        .catch((err)=>{console.log("update error",err)});
       
     Recipe.deleteOne({title:"Carrot Cake"})
         .then(console.log("deleted done"))
-        .catch(console.log("deleted error"));
-    
-      })
+        .catch((err)=>{console.log("deleted error",err)});
+    })
       
   })
   .catch(error => {
     console.error('Error connecting to the database', error);
+  });
+
+  process.on('SIGINT', () => {
+    mongoose.connection.close(() => {
+      console.log('Mongoose default connection disconnected through app termination');
+      process.exit(0);
+    });
   });
