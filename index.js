@@ -7,6 +7,7 @@ const data = require('./data');
 
 const MONGODB_URI = 'mongodb://localhost:27017/recipe-app';
 
+const recipeOne = new Recipe({title: "first recipe", cuisine:"chinese"});
 // Connection to the database "recipe-app"
 mongoose
   .connect(MONGODB_URI)
@@ -16,7 +17,10 @@ mongoose
     return Recipe.deleteMany()
   })
   .then(() => {
-    // Run your code here, after you have insured that the connection was made
+    recipeOne
+      .save()
+      .then(recipe => console.log("recipe creat", recipe))
+      .catch(error => console.log("somme error", error))
   })
   .catch(error => {
     console.error('Error connecting to the database', error);
